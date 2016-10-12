@@ -9,8 +9,10 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet private weak var display: UILabel!
+    @IBOutlet private weak var history: UILabel!
+    
     private var calculatorService: CalculatorService = CalculatorService()
     private var userIsInProgress = false
     
@@ -42,9 +44,15 @@ class ViewController: UIViewController {
         if let operationType = sender.currentTitle {
             calculatorService.performOperation(symbol: operationType)
         }
-        //print(calculatorService.result)
-        //displayText = calculatorService.result
+        displayText = calculatorService.result
     }
-
+    
+    @IBAction func makeHistory(_ sender: UIButton) {
+        if history.text == nil {
+            history.text = ""
+        }
+        history.text = history.text! + sender.currentTitle!
+    }
+    
 }
 
