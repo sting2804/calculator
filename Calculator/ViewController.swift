@@ -10,16 +10,41 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+    @IBOutlet private weak var display: UILabel!
+    private var calculatorService: CalculatorService = CalculatorService()
+    private var userIsInProgress = false
+    
+    private var displayText: Double {
+        get {
+            return Double(display.text!)!
+        }
+        set {
+            display.text = String(newValue)
+        }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @IBAction private func touchDigit(_ sender: UIButton) {
+        let digit = sender.currentTitle!
+        let currentTitle = display.text!
+        if !userIsInProgress {
+            display.text = digit
+        } else {
+            display.text = currentTitle + digit
+        }
+        userIsInProgress = true
     }
-
+    
+    @IBAction private func performOperation(_ sender: UIButton) {
+        if userIsInProgress {
+            calculatorService.setOperand(operand: displayText)
+            userIsInProgress = false
+        }
+        if let operationType = sender.currentTitle {
+            calculatorService.performOperation(symbol: operationType)
+        }
+        //print(calculatorService.result)
+        //displayText = calculatorService.result
+    }
 
 }
 
